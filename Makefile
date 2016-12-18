@@ -3,6 +3,11 @@ CC = gcc
 INCLUDE_DIR = /usr/local/tsar/devel
 LINK = $(CC) -I$(INCLUDE_DIR) $(CFLAGS)
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    LINK += -Wl,-undefined -Wl,dynamic_lookup
+endif
+
 
 OBJS =  mod_php_fpm.so
 
