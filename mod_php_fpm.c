@@ -203,7 +203,7 @@ writebuf:
     }
 
     pos = sprintf(buf, 
-        "%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld",
+        "%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld,%lld",
         st_php_fpm.n_accepted_conn,
         st_php_fpm.n_listen_queue,
         st_php_fpm.n_max_listen_queue,
@@ -213,6 +213,7 @@ writebuf:
         st_php_fpm.n_total_processes,
         st_php_fpm.n_max_active_processes,
         st_php_fpm.n_max_children_reached,
+        st_php_fpm.n_accepted_conn,
         st_php_fpm.n_slow_requests
     );
     buf[pos] = '\0';
