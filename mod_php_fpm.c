@@ -76,6 +76,7 @@ static struct mod_info php_fpm_info[] = {
     {" total", DETAIL_BIT,  0,  STATS_NULL},
     {"maxact", DETAIL_BIT,  0,  STATS_NULL},
     {"maxrea", DETAIL_BIT,  0,  STATS_NULL},
+    {"   qps", DETAIL_BIT,  0,  STATS_SUB_INTER},
     {"  sreq", DETAIL_BIT,  0,  STATS_SUB}
 };
 
@@ -94,7 +95,7 @@ init_php_fpm_host_info(struct hostinfo *p)
     p->uri = p->uri ? p->uri : "/php-fpm-status";
 
     p->server_name = getenv("PHP_FPM_TSAR_SERVER_NAME");
-    p->server_name = p->server_name ? p->server_name : "localhost";
+    p->server_name = p->server_name ? p->server_name : "127.0.0.1";
 }
 
 static void
@@ -166,10 +167,10 @@ read_php_fpm_stats(struct module *mod, const char *parameter)
             strncmp(line, "start time:", sizeof("start time:") - 1) == 0 || 
             strncmp(line, "start since:", sizeof("start since:") - 1) == 0) {
             ;
-        } else if (!strncmp(line,  "accepted conn:", sizeof("accepted conn:") - 1)) {
+        } else if (!strncmp(line,  "accepted conn:", sizeof("accepted conn:") - 1)) {
             sscanf(line + 22, "%llu", &st_php_fpm.n_accepted_conn);
             //st_php_fpm.n_accepted_conn = atoll(line + 22);
-        } else if (!strncmp(line,  "listen queue:", sizeof("listen queue:") - 1)) {
+        } else if (!strncmp(line,  "listen queue:", sizeof("listen queue:") - 1)) {
             st_php_fpm.n_listen_queue = atoll(line + 22);
         } else if (!strncmp(line, "max listen queue:", sizeof("max listen queue:") - 1)) {
             st_php_fpm.n_max_listen_queue = atoll(line + 22);
@@ -235,6 +236,13 @@ set_php_fpm_record(struct module *mod, double st_array[],
     }
     for (i = 9; i < 10; i ++) {
         if(cur_array[i] >= pre_array[i]) {
+            st_array[i] = (cur_array[i] - pre_array[i]) / inter;
+        } else {
+            st_array[i] = 0;
+        }
+    }
+    for (i = 10; i < 11; i ++) {
+        if(cur_array[i] >= pre_array[i]) {
             st_array[i] = cur_array[i] - pre_array[i];
         } else {
             st_array[i] = 0;
@@ -246,5 +254,5 @@ set_php_fpm_record(struct module *mod, double st_array[],
 void
 mod_register(struct module *mod)
 {
-    register_mod_fields(mod, "--php-fpm", php_fpm_usage, php_fpm_info, 10, read_php_fpm_stats, set_php_fpm_record);
+    register_mod_fields(mod, "--php-fpm", php_fpm_usage, php_fpm_info, 11, read_php_fpm_stats, set_php_fpm_record);
 }
