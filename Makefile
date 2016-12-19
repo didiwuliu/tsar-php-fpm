@@ -18,9 +18,10 @@ $(OBJS): %.so: %.c
 clean:
 	rm -f *.so;
 install:
-	mkdir -p /etc/tsar/conf.d/
-	cp ./mod_php_fpm.so /usr/local/tsar/modules/
-	cp ./mod_php_fpm.conf /etc/tsar/conf.d/php_fpm.conf
+	mkdir -p ${DESTDIR}/etc/tsar/conf.d/
+	mkdir -p ${DESTDIR}/usr/local/tsar/modules/
+	cp ./mod_php_fpm.so ${DESTDIR}/usr/local/tsar/modules/
+	cp ./mod_php_fpm.conf ${DESTDIR}/etc/tsar/conf.d/php_fpm.conf
 uninstall:
-	rm /usr/local/tsar/modules/mod_php_fpm.so
-	rm /etc/tsar/conf.d/php_fpm.conf
+	rm ${DESTDIR}/usr/local/tsar/modules/mod_php_fpm.so
+	rm ${DESTDIR}/etc/tsar/conf.d/php_fpm.conf
