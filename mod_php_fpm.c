@@ -76,7 +76,7 @@ static struct mod_info php_fpm_info[] = {
     {" total", DETAIL_BIT,  0,  STATS_NULL},
     {"maxact", DETAIL_BIT,  0,  STATS_NULL},
     {"maxrea", DETAIL_BIT,  0,  STATS_NULL},
-    {"   qps", DETAIL_BIT,  0,  STATS_SUB_INTER},
+    {"   qps", SUMMARY_BIT, 0,  STATS_SUB_INTER},
     {"  sreq", DETAIL_BIT,  0,  STATS_SUB}
 };
 
