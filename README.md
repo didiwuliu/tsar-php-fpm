@@ -20,7 +20,7 @@ tsar module for php-fpm
 
         $ sudo vim /etc/php-fpm.d/www.conf
 
-        \# make sure /etc/php-fpm.d/www.conf has follow config:
+        # make sure /etc/php-fpm.d/www.conf has follow config:
         listen = 9000;
         pm.status_path = /php-fpm-status
 
@@ -37,6 +37,17 @@ tsar module for php-fpm
                 fastcgi_param  SCRIPT_FILENAME  $fastcgi_script_name;
             }
         }
+
+1. If your nginx has self define port or server_name, export these variables before run tsar
+
+        export PHP_FPM_TSAR_HOST=127.0.0.1                  # default is 127.0.0.1
+        export PHP_FPM_TSAR_PORT=80                         # default is 80
+        export PHP_FPM_TSAR_URI=/php-fpm-status             # default is /php-fpm-status
+        export PHP_FPM_TSAR_SERVER_NAME=status.example.com  # default is 127.0.0.1
+        
+    tsar-php-fpm will get the php-fpm status like this:
+    
+        curl -H 'Host: status.example.com' 'http://127.0.0.1:80/php-fpm-status'
 
 1. restart nginx && php-fpm
 
