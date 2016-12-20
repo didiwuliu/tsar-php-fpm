@@ -3,11 +3,11 @@ tsar module for php-fpm
 
 1. Install tsar && tsardevel
 
-    $ git clone git://github.com/kongjian/tsar.git
-    $ cd tsar
-    $ make
-    $ sudo make install
-    $ sudo make tsardevel
+        $ git clone git://github.com/kongjian/tsar.git
+        $ cd tsar
+        $ make
+        $ sudo make install
+        $ sudo make tsardevel
 
 1. Install tsar-php-fpm
 
@@ -20,7 +20,7 @@ tsar module for php-fpm
 
     $ sudo vim /etc/php-fpm.d/www.conf
 
-    # make sure /etc/php-fpm.d/www.conf has follow config:
+    \# make sure /etc/php-fpm.d/www.conf has follow config:
     listen = 9000;
     pm.status_path = /php-fpm-status
 
