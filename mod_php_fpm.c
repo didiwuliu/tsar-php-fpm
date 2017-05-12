@@ -158,6 +158,7 @@ read_php_fpm_stats_by_http(struct hostinfo * hinfo, struct stats_php_fpm * st_ph
     int                 addr_len, domain;
     struct sockaddr_in  servaddr;
     struct sockaddr_un  servaddr_un;
+    struct timeval      timeout;
 
     char                request[LEN_4096];
     char                line[LEN_4096];
@@ -193,6 +194,15 @@ read_php_fpm_stats_by_http(struct hostinfo * hinfo, struct stats_php_fpm * st_ph
             "Accept:*/*\r\n"
             "Connection: Close\r\n\r\n",
             hinfo->uri, hinfo->server_name);
+
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout)) == -1) {
+        goto writebuf;
+    }
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) == -1) {
+        goto writebuf;
+    }
 
     if ((m = connect(sockfd, (struct sockaddr *) addr, addr_len)) == -1 ) {
         goto writebuf;
@@ -264,6 +274,7 @@ read_php_fpm_stats_by_fastcgi(struct hostinfo * hinfo, struct stats_php_fpm * st
     int                 addr_len, domain;
     struct sockaddr_in  servaddr;
     struct sockaddr_un  servaddr_un;
+    struct timeval      timeout;
 
     int                 nb;
     char               *p, *p1;
@@ -296,6 +307,15 @@ read_php_fpm_stats_by_fastcgi(struct hostinfo * hinfo, struct stats_php_fpm * st
 
 
     if ((sockfd = socket(domain, SOCK_STREAM, 0)) == -1) {
+        goto writebuf;
+    }
+
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout)) == -1) {
+        goto writebuf;
+    }
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) == -1) {
         goto writebuf;
     }
 
